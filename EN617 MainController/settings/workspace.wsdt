@@ -5,7 +5,7 @@
     
     
     
-  <CurrentConfigs><Project>blinkyFree/Flash</Project><Project>blinkyBare/Flash</Project><Project>blinkyMicrium/Flash</Project><Project>canReceiverPolling/Flash</Project><Project>canReceiverInterruptDriven/Flash</Project><Project>blinkyTT/Flash</Project><Project>canSender/Flash</Project><Project>robotTest/Flash</Project><Project>convTest/Flash</Project><Project>ctrlTest/Flash</Project></CurrentConfigs><CurrentProj>ctrlTest</CurrentProj><OverviewSelected>0</OverviewSelected></ConfigDictionary>
+  <CurrentConfigs><Project>blinkyBare/Flash</Project><Project>blinkyFree/Flash</Project><Project>blinkyMicrium/Flash</Project><Project>canReceiverPolling/Flash</Project><Project>canReceiverInterruptDriven/Flash</Project><Project>blinkyTT/Flash</Project><Project>canSender/Flash</Project><Project>robotTest/Flash</Project><Project>convTest/Flash</Project><Project>ctrlTest/Flash</Project></CurrentConfigs><CurrentProj>ctrlTest</CurrentProj><OverviewSelected>0</OverviewSelected></ConfigDictionary>
   <Desktop>
     <Static>
       <Workspace>
@@ -27,7 +27,7 @@
     <Windows>
       
       
-    <Wnd2>
+    <Wnd0>
         <Tabs>
           <Tab>
             <Identity>TabID-27881-10687</Identity>
@@ -39,7 +39,7 @@
           </Tab>
         </Tabs>
         
-      <SelectedTab>0</SelectedTab></Wnd2><Wnd3>
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd1>
         <Tabs>
           <Tab>
             <Identity>TabID-17091-12117</Identity>
@@ -49,20 +49,20 @@
           </Tab>
         <Tab><Identity>TabID-902-6092</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab><Tab><Identity>TabID-22211-19492</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs>
         
-      <SelectedTab>0</SelectedTab></Wnd3></Windows>
+      <SelectedTab>0</SelectedTab></Wnd1></Windows>
     <Editor>
       
       
       
       
-    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\projects\ctrlTest\src\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>70</YPos2><SelStart2>2706</SelStart2><SelEnd2>2706</SelEnd2></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\cell\include\control.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>0</SelStart2><SelEnd2>0</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\projects\robotTest\src\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>66</YPos2><SelStart2>2346</SelStart2><SelEnd2>2364</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\bsp\include\buttons.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>19</YPos2><SelStart2>519</SelStart2><SelEnd2>519</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\projects\ctrlTest\src\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>186</YPos2><SelStart2>6061</SelStart2><SelEnd2>6061</SelEnd2></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\cell\include\control.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>0</SelStart2><SelEnd2>0</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\projects\robotTest\src\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>96</YPos2><SelStart2>1686</SelStart2><SelEnd2>1686</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\bsp\include\buttons.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>19</YPos2><SelStart2>519</SelStart2><SelEnd2>519</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
     <Positions>
       
       
       
       
       
-    <Top><Row0><Sizes><Toolbar-0128FA60><key>iaridepm.enu1</key></Toolbar-0128FA60></Sizes></Row0><Row1><Sizes/></Row1><Row2><Sizes><Toolbar-0EDB8390><key>debuggergui.enu1</key></Toolbar-0EDB8390></Sizes></Row2></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>543</Bottom><Right>232</Right><x>-2</x><y>-2</y><xscreen>188</xscreen><yscreen>332</yscreen><sizeHorzCX>146875</sizeHorzCX><sizeHorzCY>352442</sizeHorzCY><sizeVertCX>182813</sizeVertCX><sizeVertCY>578556</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>330</Bottom><Right>1282</Right><x>-2</x><y>-2</y><xscreen>1284</xscreen><yscreen>332</yscreen><sizeHorzCX>1003125</sizeHorzCX><sizeHorzCY>352442</sizeHorzCY><sizeVertCX>146875</sizeVertCX><sizeVertCY>352442</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-0104A398><key>iaridepm.enu1</key></Toolbar-0104A398></Sizes></Row0><Row1><Sizes/></Row1></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>567</Bottom><Right>232</Right><x>-2</x><y>-2</y><xscreen>188</xscreen><yscreen>332</yscreen><sizeHorzCX>146875</sizeHorzCX><sizeHorzCY>352442</sizeHorzCY><sizeVertCX>182813</sizeVertCX><sizeVertCY>604034</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>330</Bottom><Right>1282</Right><x>-2</x><y>-2</y><xscreen>1284</xscreen><yscreen>332</yscreen><sizeHorzCX>1003125</sizeHorzCX><sizeHorzCY>352442</sizeHorzCY><sizeVertCX>146875</sizeVertCX><sizeVertCY>352442</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Workspace>
 

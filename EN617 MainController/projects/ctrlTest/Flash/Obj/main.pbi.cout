@@ -1,24 +1,24 @@
-"D:\EN617 MainController\projects\ctrlTest\src\main.c"
+"C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\src\main.c"
 -std=c99
 -ferror-limit=100
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\arm\INC\NXP
 -I
-D:\EN617 MainController\projects\ctrlTest\include
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\include
 -I
-D:\EN617 MainController\projects\ctrlTest\..\..\bsp\include
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\..\..\bsp\include
 -I
-D:\EN617 MainController\projects\ctrlTest\..\..\cell\include
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\..\..\cell\include
 -I
-D:\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\ucos-ii\ports\arm\generic\iar
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\ucos-ii\ports\arm\generic\iar
 -I
-D:\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\ucos-ii\source
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\ucos-ii\source
 -I
-D:\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\uc-lib
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\uc-lib
 -I
-D:\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\uc-cpu
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\uc-cpu
 -I
-D:\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\uc-cpu\arm\IAR
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\uc-cpu\arm\IAR
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\arm\inc
 -I
@@ -26,21 +26,21 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\arm\inc\c
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\arm\INC\NXP
 -I
-D:\EN617 MainController\projects\ctrlTest\include
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\include
 -I
-D:\EN617 MainController\bsp\include
+C:\Users\student\EN617\EN617 MainController\bsp\include
 -I
-D:\EN617 MainController\cell\include
+C:\Users\student\EN617\EN617 MainController\cell\include
 -I
-D:\EN617 MainController\Micrium\Software\ucos-ii\ports\arm\generic\iar
+C:\Users\student\EN617\EN617 MainController\Micrium\Software\ucos-ii\ports\arm\generic\iar
 -I
-D:\EN617 MainController\Micrium\Software\ucos-ii\source
+C:\Users\student\EN617\EN617 MainController\Micrium\Software\ucos-ii\source
 -I
-D:\EN617 MainController\Micrium\Software\uc-lib
+C:\Users\student\EN617\EN617 MainController\Micrium\Software\uc-lib
 -I
-D:\EN617 MainController\Micrium\Software\uc-cpu
+C:\Users\student\EN617\EN617 MainController\Micrium\Software\uc-cpu
 -I
-D:\EN617 MainController\Micrium\Software\uc-cpu\arm\IAR
+C:\Users\student\EN617\EN617 MainController\Micrium\Software\uc-cpu\arm\IAR
 -DIAR_LPC_2378_SK=1
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff

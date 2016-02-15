@@ -25,7 +25,7 @@ if not "%1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\common\bin\cspybat" -f "D:\EN617 MainController\projects\ctrlTest\settings\ctrlTest.Flash.general.xcl" --backend -f "D:\EN617 MainController\projects\ctrlTest\settings\ctrlTest.Flash.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\common\bin\cspybat" -f "C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\settings\ctrlTest.Flash.general.xcl" --backend -f "C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\settings\ctrlTest.Flash.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\common\bin\cspybat" -f "D:\EN617 MainController\projects\ctrlTest\settings\ctrlTest.Flash.general.xcl" "--debug_file=%1" --backend -f "D:\EN617 MainController\projects\ctrlTest\settings\ctrlTest.Flash.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\common\bin\cspybat" -f "C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\settings\ctrlTest.Flash.general.xcl" "--debug_file=%1" --backend -f "C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\settings\ctrlTest.Flash.driver.xcl" 
 
 @echo off 
 :end

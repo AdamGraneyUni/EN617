@@ -15,14 +15,17 @@
 #include <interface.h>
 #include <control.h>
 #include <can.h>
-
+#include <lcd.h>
 /*************************************************************************
 *                  PRIORITIES
 *************************************************************************/
 
 enum {
-  APP_TASK_MONITOR_SENS_PRIO = 4,
-  APP_TASK_CTRL_PRIO
+  APP_TASK_MONITOR_SENS1_PRIO = 4,
+  APP_TASK_MONITOR_SENS2_PRIO,
+  APP_TASK_MONITOR_BUTTON_PRIO,
+  APP_TASK_CTRL_PRIO,
+  APP_TASK_DISPLAY_PRIO
 };
 
 /*************************************************************************
@@ -30,21 +33,34 @@ enum {
 *************************************************************************/
 
 enum {
-  APP_TASK_MONITOR_SENS_STK_SIZE = 512,
+  APP_TASK_MONITOR_SENS1_STK_SIZE = 512,
+  APP_TASK_MONITOR_SENS2_STK_SIZE = 512,
   APP_TASK_CTRL_STK_SIZE = 512,
+  APP_TASK_MONITOR_BUTTON_STK_SIZE = 256,
+  APP_TASK_DISPLAY_STK_SIZE = 256,
 };
 
-static OS_STK appTaskMonitorSensStk[APP_TASK_MONITOR_SENS_STK_SIZE];
+static OS_STK appTaskMonitorButtonStk[APP_TASK_MONITOR_BUTTON_STK_SIZE];
+static OS_STK appTaskMonitorSens1Stk[APP_TASK_MONITOR_SENS1_STK_SIZE];
+static OS_STK appTaskMonitorSens2Stk[APP_TASK_MONITOR_SENS2_STK_SIZE];
 static OS_STK appTaskCtrlStk[APP_TASK_CTRL_STK_SIZE];
-
+static OS_STK appTaskDisplayStk[APP_TASK_DISPLAY_STK_SIZE];
 /*************************************************************************
 *                  APPLICATION FUNCTION PROTOTYPES
 *************************************************************************/
 
-static void appTaskMonitorSens(void *pdata);
+static void appTaskDisplay(void *pdata);
+static void appTaskMonitorButton(void *pdata);
+static void appTaskMonitorSens1(void *pdata);
+static void appTaskMonitorSens2(void *pdata);
 static void appTaskCtrl(void *pdata);
 static void canSend(uint32_t id);
+static void canHandler(void);
+static canMessage_t can1RxBuf;
 
+bool paused = false;
+bool waitForPad2Clear = false;
+bool emergencyStop = false;
 /*************************************************************************
 *                    GLOBAL FUNCTION DEFINITIONS
 *************************************************************************/
@@ -58,16 +74,30 @@ int main() {
   OSInit();                                                   
 
   /* Create Tasks */
-  OSTaskCreate(appTaskMonitorSens,                               
+  OSTaskCreate(appTaskMonitorSens1,                               
                (void *)0,
-               (OS_STK *)&appTaskMonitorSensStk[APP_TASK_MONITOR_SENS_STK_SIZE - 1],
-               APP_TASK_MONITOR_SENS_PRIO);
+               (OS_STK *)&appTaskMonitorSens1Stk[APP_TASK_MONITOR_SENS1_STK_SIZE - 1],
+               APP_TASK_MONITOR_SENS1_PRIO);
+  
+   OSTaskCreate(appTaskMonitorSens2,                               
+               (void *)0,
+               (OS_STK *)&appTaskMonitorSens2Stk[APP_TASK_MONITOR_SENS2_STK_SIZE - 1],
+               APP_TASK_MONITOR_SENS2_PRIO);
    
   OSTaskCreate(appTaskCtrl,                               
                (void *)0,
                (OS_STK *)&appTaskCtrlStk[APP_TASK_CTRL_STK_SIZE - 1],
                APP_TASK_CTRL_PRIO);
    
+  OSTaskCreate(appTaskMonitorButton,                               
+               (void *)0,
+               (OS_STK *)&appTaskMonitorButtonStk[APP_TASK_MONITOR_BUTTON_STK_SIZE - 1],
+               APP_TASK_MONITOR_BUTTON_PRIO);
+  
+  OSTaskCreate(appTaskDisplay,                               
+               (void *)0,
+               (OS_STK *)&appTaskDisplayStk[APP_TASK_DISPLAY_STK_SIZE - 1],
+               APP_TASK_DISPLAY_PRIO);
   /* Start the OS */
   OSStart();                                                  
   
@@ -78,25 +108,16 @@ int main() {
 /*************************************************************************
 *                   APPLICATION TASK DEFINITIONS
 *************************************************************************/
-
-static void appTaskMonitorSens(void *pdata) {
-  bool paused = false;
-  /* Start the OS ticker
-   * (must be done in the highest priority task)
-   */
-  osStartTick();
-  
-  /* 
-   * Now execute the main task loop for this task
-   */
-  while (true) {
-    ledSetState(USB_LINK_LED, LED_OFF);
-    ledSetState(USB_CONNECT_LED, LED_OFF);
+static void appTaskMonitorButton(void *pdata)
+{
+  while(true)
+  {
     if(isButtonPressed(JS_CENTRE))
     {
       if(paused)
       {
         canSend(0x0A);
+        paused = 0;
       }
       else
       {
@@ -105,23 +126,54 @@ static void appTaskMonitorSens(void *pdata) {
       }
     }
     
+    if(controlEmergencyStopButtonPressed())
+    {
+      canSend(0x08);
+      emergencyStop = true;
+    }
+    OSTimeDlyHMSM(0,0,0,5);
+  }
+}
+static void appTaskMonitorSens2(void *pdata) {
+  while(true)
+  {
+    ledSetState(USB_LINK_LED, LED_OFF);
     if (controlItemPresent(CONTROL_SENSOR_1)) {
         ledSetState(USB_LINK_LED, LED_ON);
         canSend(0x01);
         
         while (controlItemPresent(CONTROL_SENSOR_1)){
-          OSTimeDlyHMSM(0,0,0,10);
+          OSTimeDlyHMSM(0,0,0,20);
         }
         canSend(0x02);
     } 
-    if (controlItemPresent(CONTROL_SENSOR_2)) {
-        ledSetState(USB_CONNECT_LED, LED_ON);
-        while (controlItemPresent(CONTROL_SENSOR_2)){
-          OSTimeDlyHMSM(0,0,0,10);
-        }
+    OSTimeDlyHMSM(0,0,0,20);
+  }
+}
+static void appTaskMonitorSens1(void *pdata) {
+  
+  /* Start the OS ticker
+   * (must be done in the highest priority task)
+   */
+  osStartTick();
+  canRxInterrupt(canHandler);
+  /* 
+   * Now execute the main task loop for this task
+   */
+  while (true) {
+    ledSetState(USB_CONNECT_LED, LED_OFF);
+
+    while(waitForPad2Clear)
+    {
+      if (controlItemPresent(CONTROL_SENSOR_2)) {
+        OSTimeDlyHMSM(0,0,0,20);
+      }
+      else
+      {
         canSend(0x06);
-    } 
-    
+        waitForPad2Clear = false;
+      }
+    }
     OSTimeDly(20);
   }
 }
@@ -149,7 +201,23 @@ static void appTaskCtrl(void *pdata) {
     OSTimeDly(20);
   } 
 }
-
+static void appTaskDisplay(void *pdata)
+{
+  while(true)
+  {
+    lcdSetTextPos(1,1);
+    if(paused)
+    {
+      lcdWrite("Paused: True     ");
+    }
+    else
+    {
+      lcdWrite("Paused: False    ");
+    }
+    
+    OSTimeDlyHMSM(0,0,0,500);
+  }
+}
 static void canSend(uint32_t id) {
   canMessage_t msg = {0, 0, 0, 0};
   bool txOk = false;
@@ -169,3 +237,18 @@ static void canSend(uint32_t id) {
     txOk = canWrite(CAN_PORT_1, &msg);
   }
 
+/*
+ * A simple interrupt handler for CAN message reception on CAN1
+ */
+static void canHandler(void) {
+  if (canReady(CAN_PORT_1)) {
+    interfaceLedToggle(D1_LED);
+    canRead(CAN_PORT_1, &can1RxBuf);
+    canMessage_t msg;
+    msg = can1RxBuf;
+    if(msg.id == 0x05)
+    {
+      waitForPad2Clear = true;
+    }
+  }
+}

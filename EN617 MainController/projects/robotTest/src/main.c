@@ -36,6 +36,7 @@ static OS_STK appTaskButtonsStk[APP_TASK_BUTTONS_STK_SIZE];
 *****************************************************************************/
 
 static void appTaskButtons(void *pdata);
+static void canHandler(void);
 
 /*****************************************************************************
 *                        GLOBAL FUNCTION DEFINITIONS
