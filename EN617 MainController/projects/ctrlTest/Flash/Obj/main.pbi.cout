@@ -20,6 +20,8 @@ C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\..\..\Micrium\Soft
 -I
 C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\..\..\Micrium\Software\uc-cpu\arm\IAR
 -I
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\include
+-I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\arm\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\arm\inc\c
@@ -41,6 +43,8 @@ C:\Users\student\EN617\EN617 MainController\Micrium\Software\uc-lib
 C:\Users\student\EN617\EN617 MainController\Micrium\Software\uc-cpu
 -I
 C:\Users\student\EN617\EN617 MainController\Micrium\Software\uc-cpu\arm\IAR
+-I
+C:\Users\student\EN617\EN617 MainController\projects\ctrlTest\include
 -DIAR_LPC_2378_SK=1
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff

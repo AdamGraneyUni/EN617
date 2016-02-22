@@ -21,7 +21,8 @@
 *************************************************************************/
 
 enum {
-  APP_TASK_MONITOR_SENS1_PRIO = 4,
+  APP_TASK_EMERGENCY_STOP_PRIO = 4,
+  APP_TASK_MONITOR_SENS1_PRIO,
   APP_TASK_MONITOR_SENS2_PRIO,
   APP_TASK_MONITOR_BUTTON_PRIO,
   APP_TASK_CTRL_PRIO,
@@ -33,6 +34,7 @@ enum {
 *************************************************************************/
 
 enum {
+  APP_TASK_EMERGENCY_STOP_STK_SIZE = 256,
   APP_TASK_MONITOR_SENS1_STK_SIZE = 512,
   APP_TASK_MONITOR_SENS2_STK_SIZE = 512,
   APP_TASK_CTRL_STK_SIZE = 512,
@@ -45,10 +47,12 @@ static OS_STK appTaskMonitorSens1Stk[APP_TASK_MONITOR_SENS1_STK_SIZE];
 static OS_STK appTaskMonitorSens2Stk[APP_TASK_MONITOR_SENS2_STK_SIZE];
 static OS_STK appTaskCtrlStk[APP_TASK_CTRL_STK_SIZE];
 static OS_STK appTaskDisplayStk[APP_TASK_DISPLAY_STK_SIZE];
+static OS_STK appTaskEmergencyStopStk[APP_TASK_EMERGENCY_STOP_STK_SIZE];
 /*************************************************************************
 *                  APPLICATION FUNCTION PROTOTYPES
 *************************************************************************/
 
+static void appTaskEmergencyStop(void *pdata);
 static void appTaskDisplay(void *pdata);
 static void appTaskMonitorButton(void *pdata);
 static void appTaskMonitorSens1(void *pdata);
@@ -69,11 +73,16 @@ int main() {
   /* Initialise the hardware */
   bspInit();
   controlInit();
-
+  
   /* Initialise the OS */
   OSInit();                                                   
 
   /* Create Tasks */
+  OSTaskCreate(appTaskEmergencyStop,                               
+               (void *)0,
+               (OS_STK *)&appTaskEmergencyStopStk[APP_TASK_EMERGENCY_STOP_STK_SIZE - 1],
+               APP_TASK_EMERGENCY_STOP_PRIO);
+  
   OSTaskCreate(appTaskMonitorSens1,                               
                (void *)0,
                (OS_STK *)&appTaskMonitorSens1Stk[APP_TASK_MONITOR_SENS1_STK_SIZE - 1],
@@ -108,22 +117,42 @@ int main() {
 /*************************************************************************
 *                   APPLICATION TASK DEFINITIONS
 *************************************************************************/
+static void appTaskEmergencyStop(void *pdata)
+{
+   /* Start the OS ticker
+   * (must be done in the highest priority task)
+   */
+  osStartTick();
+  controlAlarmSetState(CONTROL_ALARM_OFF);
+  while(true)
+  {
+    if(!emergencyStop && !paused) //Never sleep if we're stopped to prevent other tasks from running.
+    {
+      OSTimeDlyHMSM(0,0,0,500);
+    }
+    else
+    {
+      if(controlEmergencyStopButtonPressed())
+      {
+        emergencyStop = false;
+        canSend(0x0B);
+      }
+      if(isButtonPressed(JS_CENTRE))
+      {
+        paused = false;
+        canSend(0x0A);
+      }
+    }
+  }
+}
 static void appTaskMonitorButton(void *pdata)
 {
   while(true)
   {
     if(isButtonPressed(JS_CENTRE))
     {
-      if(paused)
-      {
-        canSend(0x0A);
-        paused = 0;
-      }
-      else
-      {
         canSend(0x9);
         paused = 1;
-      }
     }
     
     if(controlEmergencyStopButtonPressed())
@@ -151,11 +180,6 @@ static void appTaskMonitorSens2(void *pdata) {
   }
 }
 static void appTaskMonitorSens1(void *pdata) {
-  
-  /* Start the OS ticker
-   * (must be done in the highest priority task)
-   */
-  osStartTick();
   canRxInterrupt(canHandler);
   /* 
    * Now execute the main task loop for this task
@@ -188,15 +212,14 @@ static void appTaskCtrl(void *pdata) {
     //Emergency/Error Control
     emergency = controlEmergencyStopButtonPressed();
     if (emergency) {
-      controlAlarmToggleState();
+      controlAlarmSetState(CONTROL_ALARM_ON);
       interfaceLedSetState(D3_LED, LED_ON);
-      canSend(0x08); //Send emergency stop.
       while (controlEmergencyStopButtonPressed()) {
         OSTimeDly(20);
       }
     } else {
       interfaceLedSetState(D3_LED, LED_OFF);
-      canSend(0xB);
+      controlAlarmSetState(CONTROL_ALARM_OFF);
     }
     OSTimeDly(20);
   } 
@@ -221,12 +244,7 @@ static void appTaskDisplay(void *pdata)
 static void canSend(uint32_t id) {
   canMessage_t msg = {0, 0, 0, 0};
   bool txOk = false;
-    
-  /* Start the OS ticker
-   * (must be done in the highest priority task)
-   */
-  osStartTick();
-
+  
   /* Initialise the CAN message structure */
   msg.id = id;  // arbitrary CAN message id
   msg.len = 4;    // data length 4

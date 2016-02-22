@@ -323,6 +323,7 @@
           <state>$PROJ_DIR$\..\..\Micrium\Software\uc-lib</state>
           <state>$PROJ_DIR$\..\..\Micrium\Software\uc-cpu</state>
           <state>$PROJ_DIR$\..\..\Micrium\Software\uc-cpu\arm\IAR</state>
+          <state>$PROJ_DIR$\include</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
