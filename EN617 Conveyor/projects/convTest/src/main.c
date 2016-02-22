@@ -19,13 +19,15 @@
 #include <interface.h>
 #include <conveyor.h>
 #include <can.h>
+#include <can_messages.h>
 
 /*************************************************************************
 *                  PRIORITIES
 *************************************************************************/
 
 enum {
-  APP_TASK_MONITOR_SENS_PRIO = 4
+  APP_TASK_EMERGENCY_STOP_PRIO = 4,
+  APP_TASK_MONITOR_SENS_PRIO = 8
 };
 
 /*************************************************************************
@@ -33,15 +35,16 @@ enum {
 *************************************************************************/
 
 enum {
+  APP_TASK_EMERGENCY_STOP_STK_SIZE = 256,
   APP_TASK_MONITOR_SENS_STK_SIZE = 256
 };
-
+static OS_STK appTaskEmergencyStopStk[APP_TASK_EMERGENCY_STOP_STK_SIZE];
 static OS_STK appTaskMonitorSensStk[APP_TASK_MONITOR_SENS_STK_SIZE];
 
 /*************************************************************************
 *                  APPLICATION FUNCTION PROTOTYPES
 *************************************************************************/
-
+static void appTaskEmergencyStop(void *pdata);
 static void appTaskMonitorSens(void *pdata);
 static void canSend(uint32_t id);
 static void canHandler(void);
@@ -49,6 +52,9 @@ static void canHandler(void);
 
 static canMessage_t can1RxBuf;
 bool checkForInputBlock = false;
+bool emergencyStop = false;
+bool paused = false;
+
 
 /*************************************************************************
 *                    GLOBAL FUNCTION DEFINITIONS
@@ -63,6 +69,11 @@ int main() {
   OSInit();                                                   
 
   /* Create Tasks */
+  OSTaskCreate(appTaskEmergencyStop,                               
+               (void *)0,
+               (OS_STK *)&appTaskEmergencyStopStk[APP_TASK_EMERGENCY_STOP_STK_SIZE - 1],
+               APP_TASK_EMERGENCY_STOP_PRIO);
+  
   OSTaskCreate(appTaskMonitorSens,                               
                (void *)0,
                (OS_STK *)&appTaskMonitorSensStk[APP_TASK_MONITOR_SENS_STK_SIZE - 1],
@@ -79,13 +90,23 @@ int main() {
 /*************************************************************************
 *                   APPLICATION TASK DEFINITIONS
 *************************************************************************/
-
-static void appTaskMonitorSens(void *pdata) {
-    
-  /* Start the OS ticker
+static void appTaskEmergencyStop(void *pdata)
+{
+   /* Start the OS ticker
    * (must be done in the highest priority task)
    */
   osStartTick();
+  while(true)
+  {
+    if(!emergencyStop && !paused)
+    {
+      OSTimeDlyHMSM(0,0,0,500);
+    }
+  }
+}
+
+static void appTaskMonitorSens(void *pdata) {
+    
   canRxInterrupt(canHandler);
   /* 
    * Now execute the main task loop for this task
@@ -131,5 +152,17 @@ static void canHandler(void) {
     if (msg.id == 0x02){
        checkForInputBlock = true;
     } 
+    if(msg.id == 0x08){
+      emergencyStop = true;
+    }
+    if(msg.id == 0x0B){
+      emergencyStop = false;
+    }
+    if(msg.id == 0x09){
+      paused = true;
+    }
+    if(msg.id == 0x0A){
+      paused = false;
+    }
   }
 }
