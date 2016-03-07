@@ -16,6 +16,7 @@
 #include <control.h>
 #include <can.h>
 #include <lcd.h>
+
 /*************************************************************************
 *                  PRIORITIES
 *************************************************************************/
@@ -62,6 +63,7 @@ static void canSend(uint32_t id);
 static void canHandler(void);
 static canMessage_t can1RxBuf;
 
+extern void __iar_program_start(void);
 bool paused = false;
 bool waitForPad2Clear = false;
 bool emergencyStop = false;
@@ -126,22 +128,17 @@ static void appTaskEmergencyStop(void *pdata)
   controlAlarmSetState(CONTROL_ALARM_OFF);
   while(true)
   {
-    if(!emergencyStop && !paused) //Never sleep if we're stopped to prevent other tasks from running.
-    {
-      OSTimeDlyHMSM(0,0,0,500);
-    }
-    else
+    if(emergencyStop) //Never sleep if we're stopped to prevent other tasks from running.
     {
       if(controlEmergencyStopButtonPressed())
       {
-        emergencyStop = false;
         canSend(0x0B);
+        __iar_program_start();
       }
-      if(isButtonPressed(JS_CENTRE))
-      {
-        paused = false;
-        canSend(0x0A);
-      }
+    }
+    else
+    {
+      OSTimeDlyHMSM(0,0,0,500);
     }
   }
 }
@@ -151,14 +148,32 @@ static void appTaskMonitorButton(void *pdata)
   {
     if(isButtonPressed(JS_CENTRE))
     {
+      while(isButtonPressed(JS_CENTRE)) {}
+      if(paused == false)
+      {
         canSend(0x9);
-        paused = 1;
+        paused = true;
+        lcdSetTextPos(1,1);
+        lcdWrite("Paused: True    ");
+      }
+      else
+      {
+        paused = false;
+        canSend(0xA);
+      }
     }
     
     if(controlEmergencyStopButtonPressed())
     {
+      controlAlarmSetState(CONTROL_ALARM_ON);
       canSend(0x08);
+      lcdSetTextPos(1,2);
+      if(!emergencyStop)
+      {
+        lcdWrite("Emerg Stop: True    ");
+      }
       emergencyStop = true;
+      
     }
     OSTimeDlyHMSM(0,0,0,5);
   }
@@ -237,7 +252,11 @@ static void appTaskDisplay(void *pdata)
     {
       lcdWrite("Paused: False    ");
     }
-    
+    lcdSetTextPos(1,2);
+    if(!emergencyStop)
+    {
+      lcdWrite("Emerg Stop: False");
+    }
     OSTimeDlyHMSM(0,0,0,500);
   }
 }
