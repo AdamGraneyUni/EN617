@@ -6,6 +6,43 @@
   <configuration>
     <name>Flash</name>
     <outputs>
+      <file>$PROJ_DIR$\..\..\bsp\src\lcd\fonts\Terminal_9_12x6.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\lcd\drv_glcd.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\lcd\glcd_ll.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\accelerometer.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\adc.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\bsp.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\buttons.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\can.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\delay.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\lcd.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\leds.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\potentiometer.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\pwm.c</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\MemMang\heap_1.c</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\croutine.c</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\lpc2378_cstartup.s</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\lpc2378_timers.c</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\port.c</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\portasm.s79</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\list.c</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\queue.c</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\tasks.c</file>
+      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\timers.c</file>
+      <file>$PROJ_DIR$\src\main.c</file>
+      <file>$PROJ_DIR$\Flash\Obj\tasks.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\heap_1.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\can.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\delay.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\lpc2378_timers.pbi</file>
+      <file>$PROJ_DIR$\Flash\Obj\heap_1.pbi</file>
+      <file>$PROJ_DIR$\Flash\Obj\lpc2378_timers.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\accelerometer.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\bsp.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\adc.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\port.pbi</file>
+      <file>$PROJ_DIR$\Flash\Obj\croutine.pbi</file>
+      <file>$PROJ_DIR$\Flash\Obj\list.pbi</file>
       <file>$PROJ_DIR$\Flash\Obj\queue.pbi</file>
       <file>$PROJ_DIR$\Flash\Obj\tasks.pbi</file>
       <file>$PROJ_DIR$\Flash\Obj\timers.pbi</file>
@@ -34,28 +71,31 @@
       <file>$TOOLKIT_DIR$\inc\c\io_macros.h</file>
       <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
       <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\delay.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\can.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\lcd.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\leds.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\potentiometer.c</file>
-      <file>$PROJ_DIR$\Flash\Obj\heap_1.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\can.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\delay.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\adc.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\bsp.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\accelerometer.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\lpc2378_timers.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\tasks.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\heap_1.pbi</file>
-      <file>$PROJ_DIR$\Flash\Obj\lpc2378_timers.pbi</file>
-      <file>$PROJ_DIR$\Flash\Obj\port.pbi</file>
-      <file>$PROJ_DIR$\Flash\Obj\croutine.pbi</file>
-      <file>$PROJ_DIR$\Flash\Obj\list.pbi</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\pwm.c</file>
-      <file>$PROJ_DIR$\Flash\Obj\main.o</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\accelerometer.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\adc.h</file>
+      <file>$PROJ_DIR$\Flash\Obj\glcd_ll.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\drv_glcd.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\buttons.o</file>
+      <file>$PROJ_DIR$\Flash\Exe\a.out</file>
+      <file>$PROJ_DIR$\Flash\Obj\leds.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\queue.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\list.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\croutine.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\pwm.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\port.o</file>
       <file>$PROJ_DIR$\..\..\bsp\include\bsp.h</file>
+      <file>$PROJ_DIR$\Flash\Obj\main.o</file>
       <file>$PROJ_DIR$\Flash\Obj\adc.pbi</file>
+      <file>$PROJ_DIR$\Flash\Obj\pwm.pbi</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\buttons.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
+      <file>$PROJ_DIR$\Flash\Obj\timers.o</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\lcd.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\pwm.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\leds.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\potentiometer.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\can.h</file>
+      <file>$PROJ_DIR$\Flash\Obj\potentiometer.o</file>
       <file>$PROJ_DIR$\Flash\Obj\lpc2378_cstartup.o</file>
       <file>$PROJ_DIR$\Flash\Obj\portasm.o</file>
       <file>$PROJ_DIR$\Flash\Obj\buttons.pbi</file>
@@ -69,63 +109,137 @@
       <file>$PROJ_DIR$\Flash\Obj\leds.pbi</file>
       <file>$PROJ_DIR$\Flash\Obj\potentiometer.pbi</file>
       <file>$PROJ_DIR$\Flash\Obj\lcd.pbi</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\MemMang\heap_1.c</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\lpc2378_cstartup.s</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\lpc2378_timers.c</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\port.c</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\portasm.s79</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\croutine.c</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\list.c</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\queue.c</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\tasks.c</file>
-      <file>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\timers.c</file>
-      <file>$PROJ_DIR$\src\main.c</file>
-      <file>$PROJ_DIR$\Flash\Obj\pwm.pbi</file>
-      <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\buttons.h</file>
-      <file>$PROJ_DIR$\Flash\Obj\timers.o</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\lcd.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\pwm.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\leds.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\potentiometer.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\can.h</file>
-      <file>$PROJ_DIR$\Flash\Obj\potentiometer.o</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\lcd\fonts\Terminal_9_12x6.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\lcd\glcd_ll.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\lcd\drv_glcd.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\accelerometer.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\adc.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\bsp.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\buttons.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\accelerometer.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\adc.h</file>
-      <file>$PROJ_DIR$\Flash\Obj\glcd_ll.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\drv_glcd.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\buttons.o</file>
-      <file>$PROJ_DIR$\Flash\Exe\a.out</file>
-      <file>$PROJ_DIR$\Flash\Obj\leds.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\queue.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\list.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\croutine.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\pwm.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\port.o</file>
     </outputs>
     <file>
-      <name>$PROJ_DIR$\..\..\bsp\src\delay.c</name>
+      <name>$PROJ_DIR$\..\..\bsp\src\lcd\fonts\Terminal_9_12x6.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 59</file>
+          <name>ICCARM</name>
+          <file> 54</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 35</file>
+          <name>BICOMP</name>
+          <file> 97</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 11 16 23 27 21 20 13 12 15</file>
+          <file> 42 43 46 44 45 48</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\bsp\src\lcd\drv_glcd.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 68</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 96</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 48 58 44 59 47 57 60 53 46 61 51 52 56 50 49 62 45 63 43 42 64</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\bsp\src\lcd\glcd_ll.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 67</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 95</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 46 42 51 62 45 59 48</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\bsp\src\accelerometer.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 31</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 94</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 48 53 60 64 58 57 50 49 66 65</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\bsp\src\adc.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 33</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 79</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 62 51 58 48 64 66 53 57 60 45 82 59 77 50 49 61 46</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\bsp\src\bsp.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 32</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 93</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 58 65 47 86 77 63 42 59 66 85 48 57 60 53 64 45 51 81 87 84 88 50 49 62 43 46 82 44 56</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\bsp\src\buttons.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 69</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 92</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 48 50 62 53 51 49 82 59 81 58 57 60 45 61 46 64</file>
         </tool>
       </inputs>
     </file>
@@ -133,18 +247,37 @@
       <name>$PROJ_DIR$\..\..\bsp\src\can.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 58</file>
+          <name>ICCARM</name>
+          <file> 26</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 34</file>
+          <name>BICOMP</name>
+          <file> 98</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 11 82 12 75 13 27 22 48 16 21 20 23 25 24</file>
+          <file> 48 88 49 82 50 64 59 77 53 58 57 60 62 61</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\bsp\src\delay.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 27</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 99</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 48 53 60 64 58 57 50 49 52</file>
         </tool>
       </inputs>
     </file>
@@ -152,18 +285,18 @@
       <name>$PROJ_DIR$\..\..\bsp\src\lcd.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 62</file>
+          <name>ICCARM</name>
+          <file> 55</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 18</file>
+          <name>BICOMP</name>
+          <file> 102</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 10 21 26 5 15 11 16 78 20 23 27 6 13 12 7 19 9 8</file>
+          <file> 47 58 63 42 52 48 53 84 57 60 64 43 50 49 44 56 46 45</file>
         </tool>
       </inputs>
     </file>
@@ -171,18 +304,18 @@
       <name>$PROJ_DIR$\..\..\bsp\src\leds.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 60</file>
+          <name>ICCARM</name>
+          <file> 71</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 97</file>
+          <name>BICOMP</name>
+          <file> 100</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 11 20 23 16 14 21 22 80 13 12 25 8 27 9</file>
+          <file> 48 57 60 53 51 58 59 86 50 49 62 45 64 46</file>
         </tool>
       </inputs>
     </file>
@@ -190,46 +323,37 @@
       <name>$PROJ_DIR$\..\..\bsp\src\potentiometer.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 61</file>
-        </tool>
-        <tool>
           <name>ICCARM</name>
-          <file> 83</file>
+          <file> 89</file>
         </tool>
-      </outputs>
-      <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 16 12 8 11 14 21 20 13 9 27 92 23 81</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>[ROOT_NODE]</name>
-      <outputs>
-        <tool>
-          <name>ILINK</name>
-          <file> 96</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\bsp\src\pwm.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 74</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
           <file> 101</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 27 8 79 11 13 25 16 14 12 22 48 21 20 23 24 9</file>
+          <file> 53 49 45 48 51 58 57 50 46 64 66 60 87</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\bsp\src\pwm.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 75</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 80</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 64 45 85 48 50 62 53 51 49 59 77 58 57 60 61 46</file>
         </tool>
       </inputs>
     </file>
@@ -237,12 +361,25 @@
       <name>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\MemMang\heap_1.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 41</file>
+          <name>ICCARM</name>
+          <file> 25</file>
         </tool>
         <tool>
+          <name>BICOMP</name>
+          <file> 29</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\croutine.c</name>
+      <outputs>
+        <tool>
           <name>ICCARM</name>
-          <file> 33</file>
+          <file> 74</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 35</file>
         </tool>
       </outputs>
     </file>
@@ -251,7 +388,7 @@
       <outputs>
         <tool>
           <name>AARM</name>
-          <file> 50</file>
+          <file> 90</file>
         </tool>
       </outputs>
     </file>
@@ -259,12 +396,12 @@
       <name>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\lpc2378_timers.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 42</file>
+          <name>ICCARM</name>
+          <file> 30</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 39</file>
+          <name>BICOMP</name>
+          <file> 28</file>
         </tool>
       </outputs>
     </file>
@@ -272,12 +409,12 @@
       <name>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\portable\IAR\LPC2378\port.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 43</file>
+          <name>ICCARM</name>
+          <file> 76</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 102</file>
+          <name>BICOMP</name>
+          <file> 34</file>
         </tool>
       </outputs>
     </file>
@@ -286,20 +423,7 @@
       <outputs>
         <tool>
           <name>AARM</name>
-          <file> 51</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\croutine.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 44</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 100</file>
+          <file> 91</file>
         </tool>
       </outputs>
     </file>
@@ -307,12 +431,12 @@
       <name>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\list.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 45</file>
+          <name>ICCARM</name>
+          <file> 73</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 99</file>
+          <name>BICOMP</name>
+          <file> 36</file>
         </tool>
       </outputs>
     </file>
@@ -320,12 +444,12 @@
       <name>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\queue.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 0</file>
+          <name>ICCARM</name>
+          <file> 72</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 98</file>
+          <name>BICOMP</name>
+          <file> 37</file>
         </tool>
       </outputs>
     </file>
@@ -333,12 +457,12 @@
       <name>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\tasks.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 1</file>
+          <name>ICCARM</name>
+          <file> 24</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 40</file>
+          <name>BICOMP</name>
+          <file> 38</file>
         </tool>
       </outputs>
     </file>
@@ -346,12 +470,12 @@
       <name>$PROJ_DIR$\..\..\FreeRTOSV7.1.0\Source\timers.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 2</file>
+          <name>ICCARM</name>
+          <file> 83</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 77</file>
+          <name>BICOMP</name>
+          <file> 39</file>
         </tool>
       </outputs>
     </file>
@@ -359,154 +483,30 @@
       <name>$PROJ_DIR$\src\main.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 3</file>
+          <name>ICCARM</name>
+          <file> 78</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 47</file>
+          <name>BICOMP</name>
+          <file> 40</file>
         </tool>
       </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\bsp\src\lcd\fonts\Terminal_9_12x6.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 57</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 17</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 5 6 9 7 8 11</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\bsp\src\lcd\glcd_ll.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 55</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 93</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 9 5 14 25 8 22 11</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\bsp\src\lcd\drv_glcd.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 56</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 94</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 11 21 7 22 10 20 23 16 9 24 14 15 19 13 12 25 8 26 6 5 27</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\bsp\src\accelerometer.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 54</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 38</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 11 16 23 27 21 20 13 12 92 91</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\bsp\src\adc.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 49</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 36</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 25 14 21 11 27 92 16 20 23 8 75 22 48 13 12 24 9</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\bsp\src\bsp.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 53</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 37</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 21 91 10 80 48 26 5 22 92 79 11 20 23 16 27 8 14 76 81 78 82 13 12 25 6 9 75 7 19</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\bsp\src\buttons.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 52</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 95</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 11 13 25 16 14 12 75 22 76 21 20 23 8 24 9 27</file>
-        </tool>
-      </inputs>
     </file>
     <file>
       <name>$PROJ_DIR$\Flash\Exe\a.out</name>
       <outputs>
         <tool>
           <name>OBJCOPY</name>
-          <file> 4</file>
+          <file> 41</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 70</file>
         </tool>
       </outputs>
     </file>

@@ -19,7 +19,6 @@
 #include <interface.h>
 #include <conveyor.h>
 #include <can.h>
-#include <can_messages.h>
 
 /*************************************************************************
 *                  PRIORITIES
@@ -27,7 +26,8 @@
 
 enum {
   APP_TASK_EMERGENCY_STOP_PRIO = 4,
-  APP_TASK_MONITOR_SENS_PRIO = 8
+  APP_TASK_MONITOR_SENS2_PRIO = 8,
+  APP_TASK_MONITOR_SENS1_PRIO
 };
 
 /*************************************************************************
@@ -36,25 +36,32 @@ enum {
 
 enum {
   APP_TASK_EMERGENCY_STOP_STK_SIZE = 256,
-  APP_TASK_MONITOR_SENS_STK_SIZE = 256
+  APP_TASK_MONITOR_SENS1_STK_SIZE = 256,
+  APP_TASK_MONITOR_SENS2_STK_SIZE = 256
 };
+
 static OS_STK appTaskEmergencyStopStk[APP_TASK_EMERGENCY_STOP_STK_SIZE];
-static OS_STK appTaskMonitorSensStk[APP_TASK_MONITOR_SENS_STK_SIZE];
+static OS_STK appTaskMonitorSens1Stk[APP_TASK_MONITOR_SENS1_STK_SIZE];
+static OS_STK appTaskMonitorSens2Stk[APP_TASK_MONITOR_SENS2_STK_SIZE];
 
 /*************************************************************************
 *                  APPLICATION FUNCTION PROTOTYPES
 *************************************************************************/
+
+static void appTaskMonitorSens1(void *pdata);
+static void appTaskMonitorSens2(void *pdata);
 static void appTaskEmergencyStop(void *pdata);
-static void appTaskMonitorSens(void *pdata);
 static void canSend(uint32_t id);
 static void canHandler(void);
 
 
 static canMessage_t can1RxBuf;
 bool checkForInputBlock = false;
+bool stopConveyorForLoad = false;
+int noBlocks = 0;
 bool emergencyStop = false;
 bool paused = false;
-
+conveyorState_t pausedState;
 
 /*************************************************************************
 *                    GLOBAL FUNCTION DEFINITIONS
@@ -73,11 +80,14 @@ int main() {
                (void *)0,
                (OS_STK *)&appTaskEmergencyStopStk[APP_TASK_EMERGENCY_STOP_STK_SIZE - 1],
                APP_TASK_EMERGENCY_STOP_PRIO);
-  
-  OSTaskCreate(appTaskMonitorSens,                               
+  OSTaskCreate(appTaskMonitorSens1,                               
                (void *)0,
-               (OS_STK *)&appTaskMonitorSensStk[APP_TASK_MONITOR_SENS_STK_SIZE - 1],
-               APP_TASK_MONITOR_SENS_PRIO);
+               (OS_STK *)&appTaskMonitorSens1Stk[APP_TASK_MONITOR_SENS1_STK_SIZE - 1],
+               APP_TASK_MONITOR_SENS1_PRIO);
+  OSTaskCreate(appTaskMonitorSens2,                               
+               (void *)0,
+               (OS_STK *)&appTaskMonitorSens2Stk[APP_TASK_MONITOR_SENS2_STK_SIZE - 1],
+               APP_TASK_MONITOR_SENS2_PRIO);
  
    
   /* Start the OS */
@@ -98,16 +108,47 @@ static void appTaskEmergencyStop(void *pdata)
   osStartTick();
   while(true)
   {
-    if(!emergencyStop && !paused)
+    if(emergencyStop)
     {
+      ledToggle(USB_LINK_LED);
+      conveyorSetState(CONVEYOR_OFF);
+    } else if(paused){ 
+      pausedState = conveyorGetState();
+      conveyorSetState(CONVEYOR_OFF);
+    }
+    else{
       OSTimeDlyHMSM(0,0,0,500);
     }
+    
   }
 }
 
-static void appTaskMonitorSens(void *pdata) {
+static void appTaskMonitorSens1(void *pdata) {
+   while (true) { 
+    if (conveyorItemPresent(CONVEYOR_SENSOR_1)) {
+        conveyorSetState(CONVEYOR_OFF);
+        canSend(0x04);
+        while(conveyorItemPresent(CONVEYOR_SENSOR_1)){
+          canSend(0x04);
+          OSTimeDly(20);
+        }
+        noBlocks -= 1;
+    }
+    if (!conveyorItemPresent(CONVEYOR_SENSOR_1) && (noBlocks > 0) && !stopConveyorForLoad){
+      conveyorSetState(CONVEYOR_REVERSE);
+    }
     
+    OSTimeDly(20);
+  }
+  
+}
+static void appTaskMonitorSens2(void *pdata) {
+       /* Start the OS ticker
+   * (must be done in the highest priority task)
+   */
+  osStartTick();
   canRxInterrupt(canHandler);
+  
   /* 
    * Now execute the main task loop for this task
    */
@@ -117,13 +158,14 @@ static void appTaskMonitorSens(void *pdata) {
         OSTimeDlyHMSM(0,0,2,0);
         if (conveyorItemPresent(CONVEYOR_SENSOR_2)){
           conveyorSetState(CONVEYOR_REVERSE);
+          checkForInputBlock = false;
+          stopConveyorForLoad = false;
+          noBlocks += 1;
         }
-    } 
-    if (conveyorItemPresent(CONVEYOR_SENSOR_1)) {
-        conveyorSetState(CONVEYOR_OFF);
-        canSend(0x04);
-    } 
-    
+    }
+    if (stopConveyorForLoad){
+      conveyorSetState(CONVEYOR_OFF);
+    }
     OSTimeDly(20);
   }
 }
@@ -151,18 +193,17 @@ static void canHandler(void) {
     msg = can1RxBuf;
     if (msg.id == 0x02){
        checkForInputBlock = true;
-    } 
+       stopConveyorForLoad = true;
+    }    
     if(msg.id == 0x08){
       emergencyStop = true;
-    }
-    if(msg.id == 0x0B){
-      emergencyStop = false;
     }
     if(msg.id == 0x09){
       paused = true;
     }
     if(msg.id == 0x0A){
       paused = false;
+      conveyorSetState(pausedState);
     }
   }
 }
