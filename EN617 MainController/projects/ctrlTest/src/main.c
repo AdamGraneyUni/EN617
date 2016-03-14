@@ -16,7 +16,8 @@
 #include <control.h>
 #include <can.h>
 #include <lcd.h>
-
+#include <delay.h>
+#include "can_messages.h"
 /*************************************************************************
 *                  PRIORITIES
 *************************************************************************/
@@ -27,7 +28,8 @@ enum {
   APP_TASK_MONITOR_SENS2_PRIO,
   APP_TASK_MONITOR_BUTTON_PRIO,
   APP_TASK_CTRL_PRIO,
-  APP_TASK_DISPLAY_PRIO
+  APP_TASK_DISPLAY_PRIO,
+  APP_TASK_LEDS_PRIO
 };
 
 /*************************************************************************
@@ -41,6 +43,7 @@ enum {
   APP_TASK_CTRL_STK_SIZE = 512,
   APP_TASK_MONITOR_BUTTON_STK_SIZE = 256,
   APP_TASK_DISPLAY_STK_SIZE = 256,
+  APP_TASK_LEDS_STK_SIZE = 256
 };
 
 static OS_STK appTaskMonitorButtonStk[APP_TASK_MONITOR_BUTTON_STK_SIZE];
@@ -49,11 +52,13 @@ static OS_STK appTaskMonitorSens2Stk[APP_TASK_MONITOR_SENS2_STK_SIZE];
 static OS_STK appTaskCtrlStk[APP_TASK_CTRL_STK_SIZE];
 static OS_STK appTaskDisplayStk[APP_TASK_DISPLAY_STK_SIZE];
 static OS_STK appTaskEmergencyStopStk[APP_TASK_EMERGENCY_STOP_STK_SIZE];
+static OS_STK appTaskLedsStk[APP_TASK_LEDS_STK_SIZE];
 /*************************************************************************
 *                  APPLICATION FUNCTION PROTOTYPES
 *************************************************************************/
 
 static void appTaskEmergencyStop(void *pdata);
+static void appTaskLeds(void *pdata);
 static void appTaskDisplay(void *pdata);
 static void appTaskMonitorButton(void *pdata);
 static void appTaskMonitorSens1(void *pdata);
@@ -67,10 +72,13 @@ extern void __iar_program_start(void);
 bool paused = false;
 bool waitForPad2Clear = false;
 bool emergencyStop = false;
+int blocks_in_system = 0;
+bool stopped = true;
 /*************************************************************************
 *                    GLOBAL FUNCTION DEFINITIONS
 *************************************************************************/
 
+  
 int main() {
   /* Initialise the hardware */
   bspInit();
@@ -95,11 +103,6 @@ int main() {
                (OS_STK *)&appTaskMonitorSens2Stk[APP_TASK_MONITOR_SENS2_STK_SIZE - 1],
                APP_TASK_MONITOR_SENS2_PRIO);
    
-  OSTaskCreate(appTaskCtrl,                               
-               (void *)0,
-               (OS_STK *)&appTaskCtrlStk[APP_TASK_CTRL_STK_SIZE - 1],
-               APP_TASK_CTRL_PRIO);
-   
   OSTaskCreate(appTaskMonitorButton,                               
                (void *)0,
                (OS_STK *)&appTaskMonitorButtonStk[APP_TASK_MONITOR_BUTTON_STK_SIZE - 1],
@@ -109,6 +112,12 @@ int main() {
                (void *)0,
                (OS_STK *)&appTaskDisplayStk[APP_TASK_DISPLAY_STK_SIZE - 1],
                APP_TASK_DISPLAY_PRIO);
+  
+  OSTaskCreate(appTaskLeds,                               
+               (void *)0,
+               (OS_STK *)&appTaskLedsStk[APP_TASK_LEDS_STK_SIZE - 1],
+               APP_TASK_LEDS_PRIO);
+  
   /* Start the OS */
   OSStart();                                                  
   
@@ -130,9 +139,14 @@ static void appTaskEmergencyStop(void *pdata)
   {
     if(emergencyStop) //Never sleep if we're stopped to prevent other tasks from running.
     {
-      if(controlEmergencyStopButtonPressed())
+      controlAlarmSetState(CONTROL_ALARM_ON);
+      interfaceLedSetState(D3_LED, LED_OFF);
+      lcdSetTextPos(1,2);
+      lcdWrite("Emerg Stop: True    ");
+      if(isButtonPressed(JS_RIGHT))
       {
-        canSend(0x0B);
+        canSend(RESET);
+        dly100us(500);
         __iar_program_start();
       }
     }
@@ -151,7 +165,7 @@ static void appTaskMonitorButton(void *pdata)
       while(isButtonPressed(JS_CENTRE)) {}
       if(paused == false)
       {
-        canSend(0x9);
+        canSend(PAUSE);
         paused = true;
         lcdSetTextPos(1,1);
         lcdWrite("Paused: True    ");
@@ -159,14 +173,14 @@ static void appTaskMonitorButton(void *pdata)
       else
       {
         paused = false;
-        canSend(0xA);
+        canSend(RESUME);
       }
     }
     
     if(controlEmergencyStopButtonPressed())
     {
       controlAlarmSetState(CONTROL_ALARM_ON);
-      canSend(0x08);
+      canSend(EMERGENCY_STOP);
       lcdSetTextPos(1,2);
       if(!emergencyStop)
       {
@@ -175,21 +189,44 @@ static void appTaskMonitorButton(void *pdata)
       emergencyStop = true;
       
     }
+    
+    if(isButtonPressed(BUT_1))
+    {
+      canSend(START);
+      stopped = false;
+    }
+    
+    if(isButtonPressed(BUT_2))
+    {
+      stopped = true;
+      while(blocks_in_system > 0)
+      {
+        OSTimeDlyHMSM(0,0,0,50);
+      }
+      canSend(STOP);
+      
+    }
     OSTimeDlyHMSM(0,0,0,5);
   }
 }
 static void appTaskMonitorSens2(void *pdata) {
   while(true)
   {
+    while(stopped)
+    {
+      OSTimeDlyHMSM(0,0,0,50);
+    }
+    
     ledSetState(USB_LINK_LED, LED_OFF);
     if (controlItemPresent(CONTROL_SENSOR_1)) {
         ledSetState(USB_LINK_LED, LED_ON);
-        canSend(0x01);
+        canSend(READY_TO_PICKUP_PAD1);
         
         while (controlItemPresent(CONTROL_SENSOR_1)){
           OSTimeDlyHMSM(0,0,0,20);
         }
-        canSend(0x02);
+        canSend(PICKED_UP_PAD1);
+        blocks_in_system++;
     } 
     OSTimeDlyHMSM(0,0,0,20);
   }
@@ -209,35 +246,12 @@ static void appTaskMonitorSens1(void *pdata) {
       }
       else
       {
-        canSend(0x06);
+        canSend(PAD2_CLEAR);
         waitForPad2Clear = false;
       }
     }
     OSTimeDly(20);
   }
-}
-
-static void appTaskCtrl(void *pdata) {
-  static bool emergency = false;
-  static bool running = false;
-  uint32_t btnState;
-  interfaceLedSetState(D1_LED | D2_LED | D3_LED | D4_LED, LED_OFF);
-  
-  while (true) {
-    //Emergency/Error Control
-    emergency = controlEmergencyStopButtonPressed();
-    if (emergency) {
-      controlAlarmSetState(CONTROL_ALARM_ON);
-      interfaceLedSetState(D3_LED, LED_ON);
-      while (controlEmergencyStopButtonPressed()) {
-        OSTimeDly(20);
-      }
-    } else {
-      interfaceLedSetState(D3_LED, LED_OFF);
-      controlAlarmSetState(CONTROL_ALARM_OFF);
-    }
-    OSTimeDly(20);
-  } 
 }
 static void appTaskDisplay(void *pdata)
 {
@@ -246,12 +260,20 @@ static void appTaskDisplay(void *pdata)
     lcdSetTextPos(1,1);
     if(paused)
     {
-      lcdWrite("Paused: True     ");
+      lcdWrite("State: Paused \t");
     }
     else
     {
-      lcdWrite("Paused: False    ");
+      if(stopped)
+      {
+        lcdWrite("State: Stopped \t");
+      }
+      else
+      {
+        lcdWrite("State: Running \t");
+      }
     }
+    
     lcdSetTextPos(1,2);
     if(!emergencyStop)
     {
@@ -260,6 +282,50 @@ static void appTaskDisplay(void *pdata)
     OSTimeDlyHMSM(0,0,0,500);
   }
 }
+
+static void appTaskLeds(void *pdata)
+{
+  interfaceInit(CONTROL);
+  interfaceLedSetState(D1_LED | D2_LED | D3_LED | D4_LED, LED_OFF);
+  
+  while(true)
+  {
+    
+    if(stopped && (blocks_in_system > 0))
+    {
+      interfaceLedToggle(D1_LED);
+    }
+    else if(stopped)
+    {
+      interfaceLedSetState(D1_LED, LED_OFF);
+    }
+    else
+    {
+      interfaceLedSetState(D1_LED, LED_ON);
+    }
+    
+    if(paused)
+    {
+      interfaceLedSetState(D2_LED, LED_ON);
+    }
+    else
+    {
+      interfaceLedSetState(D2_LED, LED_OFF);
+    }
+    
+    if(emergencyStop || stopped)
+    {
+      interfaceLedSetState(D3_LED, LED_OFF);
+    }
+    else
+    {
+      interfaceLedSetState(D3_LED, LED_ON);
+    }
+    
+    OSTimeDlyHMSM(0,0,0,500);
+  }
+}
+
 static void canSend(uint32_t id) {
   canMessage_t msg = {0, 0, 0, 0};
   bool txOk = false;
@@ -270,8 +336,7 @@ static void canSend(uint32_t id) {
   msg.dataA = 0;
   msg.dataB = 0;
   
-    // Transmit message on CAN 1
-    txOk = canWrite(CAN_PORT_1, &msg);
+  txOk = canWrite(CAN_PORT_1, &msg);
   }
 
 /*
@@ -283,9 +348,20 @@ static void canHandler(void) {
     canRead(CAN_PORT_1, &can1RxBuf);
     canMessage_t msg;
     msg = can1RxBuf;
-    if(msg.id == 0x05)
+    if(msg.id == QUERY_PAD2_STATUS)
     {
       waitForPad2Clear = true;
+    }
+    if(msg.id == OUTPUT_ROBOT_FINISHED)
+    {
+      if(blocks_in_system > 0)
+      {
+        blocks_in_system--;
+      }
+    }
+    if(msg.id == EMERGENCY_STOP)
+    {
+      emergencyStop = true;
     }
   }
 }
