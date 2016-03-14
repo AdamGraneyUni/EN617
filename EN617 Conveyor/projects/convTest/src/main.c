@@ -19,6 +19,7 @@
 #include <interface.h>
 #include <conveyor.h>
 #include <can.h>
+#include <can_messages.h>
 
 /*************************************************************************
 *                  PRIORITIES
@@ -61,11 +62,15 @@ bool stopConveyorForLoad = false;
 int noBlocks = 0;
 bool emergencyStop = false;
 bool paused = false;
+bool stopped = true;
 conveyorState_t pausedState;
+
+extern void __iar_program_start(void);
 
 /*************************************************************************
 *                    GLOBAL FUNCTION DEFINITIONS
-*************************************************************************/
+******************************************
+*******************************/
 
 int main() {
   /* Initialise the hardware */
@@ -106,6 +111,7 @@ static void appTaskEmergencyStop(void *pdata)
    * (must be done in the highest priority task)
    */
   osStartTick();
+  canRxInterrupt(canHandler);
   while(true)
   {
     if(emergencyStop)
@@ -115,6 +121,8 @@ static void appTaskEmergencyStop(void *pdata)
     } else if(paused){ 
       pausedState = conveyorGetState();
       conveyorSetState(CONVEYOR_OFF);
+    } else if (stopped){
+      ledToggle(USB_CONNECT_LED);
     }
     else{
       OSTimeDlyHMSM(0,0,0,500);
@@ -127,11 +135,13 @@ static void appTaskMonitorSens1(void *pdata) {
    while (true) { 
     if (conveyorItemPresent(CONVEYOR_SENSOR_1)) {
         conveyorSetState(CONVEYOR_OFF);
-        canSend(0x04);
+        canSend(READY_TO_PICKUP_CONVEYOR);
         while(conveyorItemPresent(CONVEYOR_SENSOR_1)){
-          canSend(0x04);
+          canSend(READY_TO_PICKUP_CONVEYOR);
           OSTimeDly(20);
         }
+        //THIS IS NOT WORKING FIX IT
+        canSend(PICKED_UP_CONVEYOR);
         noBlocks -= 1;
     }
     if (!conveyorItemPresent(CONVEYOR_SENSOR_1) && (noBlocks > 0) && !stopConveyorForLoad){
@@ -143,11 +153,7 @@ static void appTaskMonitorSens1(void *pdata) {
   
 }
 static void appTaskMonitorSens2(void *pdata) {
-       /* Start the OS ticker
-   * (must be done in the highest priority task)
-   */
-  osStartTick();
-  canRxInterrupt(canHandler);
+ 
   
   /* 
    * Now execute the main task loop for this task
@@ -191,19 +197,29 @@ static void canHandler(void) {
     canRead(CAN_PORT_1, &can1RxBuf);
     canMessage_t msg;
     msg = can1RxBuf;
-    if (msg.id == 0x02){
+    if (msg.id == PICKED_UP_PAD1){
        checkForInputBlock = true;
        stopConveyorForLoad = true;
     }    
-    if(msg.id == 0x08){
+    if(msg.id == EMERGENCY_STOP){
       emergencyStop = true;
     }
-    if(msg.id == 0x09){
+    if(msg.id == PAUSE){
       paused = true;
     }
-    if(msg.id == 0x0A){
+    if(msg.id == RESUME){
       paused = false;
       conveyorSetState(pausedState);
     }
+    if(msg.id == RESET){
+      __iar_program_start();
+    }
+    if(msg.id == START){
+      stopped = false;
+    }
+    if(msg.id == STOP){
+      stopped = true;
+    }
+    
   }
 }

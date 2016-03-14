@@ -13,19 +13,15 @@ StopOnUncaught=_ 0
 StopOnThrow=_ 0
 [JLinkDriver]
 WatchCond=_ 0
-Watch0=_ 0 "0x00000000" 0 "0x00000000" 0 "0x00000000" 0 "0x00000000" 0 0 0 0
-Watch1=_ 0 "0x00000000" 0 "0x00000000" 0 "0x00000000" 0 "0x00000000" 0 0 0 0
+Watch0=_ 0 "" 0 "" 0 "" 0 "" 0 0 0 0
+Watch1=_ 0 "" 0 "" 0 "" 0 "" 0 0 0 0
 CStepIntDis=_ 0
 [DebugChecksum]
-Checksum=1511981648
+Checksum=1835874087
 [CallStack]
 ShowArgs=0
 [Disassembly]
 MixedMode=1
-[Disassemble mode]
-mode=0
-[Breakpoints2]
-Count=0
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -33,12 +29,17 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
-[Aliases]
-A0=_ "C:\Users\student\Desktop\dk0-pcell-fd115bde695d\cell\src\conveyor.c" ""
-A1=_ "C:\Users\student\Desktop\dk0-pcell-fd115bde695d\projects\convTest\src\main.c" ""
-Count=2
-SuppressDialog=1
 [CallStackLog]
 Enabled=0
 [CallStackStripe]
 ShowTiming=1
+[Disassemble mode]
+mode=0
+[Breakpoints2]
+Count=0
+[Aliases]
+A0=_ "C:\Users\student\Desktop\dk0-pcell-fd115bde695d\bsp\src\bsp.c" ""
+A1=_ "C:\Users\student\Desktop\dk0-pcell-fd115bde695d\cell\src\conveyor.c" ""
+A2=_ "C:\Users\student\Desktop\dk0-pcell-fd115bde695d\projects\convTest\src\main.c" ""
+Count=3
+SuppressDialog=1
