@@ -192,8 +192,11 @@ static void appTaskMonitorButton(void *pdata)
     
     if(isButtonPressed(BUT_1))
     {
-      canSend(START);
-      stopped = false;
+      if(stopped)
+      {
+        canSend(START);
+        stopped = false;
+      }
     }
     
     if(isButtonPressed(BUT_2))
