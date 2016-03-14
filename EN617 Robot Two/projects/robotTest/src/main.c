@@ -14,6 +14,7 @@
 #include <interface.h>
 #include <robot.h>
 #include <can.h>
+#include <can_messages.h>
 
 #define BUTTONS_TASK_ID 0
 #define N_JOINTS 4
@@ -58,12 +59,14 @@ bool moveBlock = false;
 bool padClear = false;
 bool paused = false;
 bool emergencyStop = false;
+bool stopped = true;
+int pickupAttempts = 0;
 extern void __iar_program_start(void);
 /*****************************************************************************
 *                        GLOBAL FUNCTION DEFINITIONS
 *****************************************************************************/
 
-int main() {
+int main() { 
   /* Initialise the hardware */
   bspInit();
   robotInit();
@@ -106,20 +109,23 @@ static void appTaskEmergencyStop(void *pdata)
    * (must be done in the highest priority task)
    */
   osStartTick();
+  canRxInterrupt(canHandler);
   while(true)
   {
     if(emergencyStop)
     {
-      ledToggle(USB_LINK_LED);
+        ledToggle(USB_LINK_LED);
+    } else if (stopped){
+        ledToggle(USB_CONNECT_LED);
     } else {
-      OSTimeDlyHMSM(0,0,0,500);
+        OSTimeDlyHMSM(0,0,0,500);
     }
   }
 }
 
 
 static void appTaskButtons(void *pdata) {
-  canRxInterrupt(canHandler);
+  
   
   /* the main task loop for this task  */
   while (true) {
@@ -143,7 +149,11 @@ static void moveJoint(robotJoint_t joint, int position){
 static void appTaskMoveBlock(void *pdata){
   while (true){
       while(moveBlock){
-          canSend(0x05); //Send a message asking if the PAD is clear.
+          if (pickupAttempts == 2){
+              canSend(EMERGENCY_STOP);
+              emergencyStop=true;
+           }
+          canSend(QUERY_PAD2_STATUS); //Send a message asking if the PAD is clear.
           while(!padClear)
           {
             OSTimeDlyHMSM(0,0,0,10);
@@ -184,6 +194,8 @@ static void appTaskMoveBlock(void *pdata){
           //Waist to Neutral
           moveJoint(ROBOT_WAIST, 67250);
           moveBlock = false;
+          canSend(OUTPUT_ROBOT_FINISHED);
+          pickupAttempts++;
       }
       
     while(paused)
@@ -202,28 +214,40 @@ static void canHandler(void) {
     canRead(CAN_PORT_1, &can1RxBuf);
     canMessage_t msg;
     msg = can1RxBuf;
-      if (msg.id == 0x04){
+      if (msg.id == READY_TO_PICKUP_CONVEYOR){
          moveBlock = true;
       }
-      if(msg.id == 0x06)
+      if(msg.id == PAD2_CLEAR)
       {
         padClear = true;
       }
-      if(msg.id == 0x08)
+      if(msg.id == PICKED_UP_CONVEYOR)
+      {
+        pickupAttempts = 0;
+      }
+      if(msg.id == EMERGENCY_STOP)
       {
         emergencyStop = true;
       }
-      if(msg.id == 0x0B)
+      if(msg.id == RESET)
       {
         __iar_program_start();
       }
-      if(msg.id == 0x09)
+      if(msg.id == PAUSE)
       {
         paused = true;
       }
-      if(msg.id == 0x0A)
+      if(msg.id == RESUME)
       {
         paused = false;
+      }
+      if(msg.id == START)
+      {
+        stopped = false;
+      }
+      if(msg.id == STOP)
+      {
+        stopped = true;
       }
       
   }
@@ -231,12 +255,6 @@ static void canHandler(void) {
 
 static void canSend(uint32_t id) {
   canMessage_t msg = {0, 0, 0, 0};
-  bool txOk = false;
-    
-  /* Start the OS ticker
-   * (must be done in the highest priority task)
-   */
-  osStartTick();
 
   /* Initialise the CAN message structure */
   msg.id = id;  // arbitrary CAN message id
@@ -245,9 +263,5 @@ static void canSend(uint32_t id) {
   msg.dataB = 0;
   
     // Transmit message on CAN 1
-    txOk = canWrite(CAN_PORT_1, &msg);
-  }
-//Waist 00086750
-//Elbow 00081750
-//Wrist 00085250
-//CLAAWW 00058750
+    canWrite(CAN_PORT_1, &msg);
+}

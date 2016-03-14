@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=243564046
+Checksum=-1382657301
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -39,5 +39,6 @@ mode=0
 Count=0
 [Aliases]
 A0=_ "C:\Users\student\Documents\617\EN617 Robot\bsp\src\pwm.c" ""
-Count=1
+A1=_ "C:\Users\student\Documents\617\EN617 Robot\cell\src\robot.c" ""
+Count=2
 SuppressDialog=1
