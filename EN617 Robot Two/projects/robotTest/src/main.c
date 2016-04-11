@@ -169,6 +169,7 @@ static void appTaskMoveBlock(void *pdata){
           moveJoint(ROBOT_HAND, 45000);
           //Waist to Convey
           moveJoint(ROBOT_WAIST, 47500);
+          pickupAttempts++;
           //Wrist to Convey
           moveJoint(ROBOT_WRIST, 64500);
           //Elbow to Convey
@@ -195,7 +196,6 @@ static void appTaskMoveBlock(void *pdata){
           moveJoint(ROBOT_WAIST, 67250);
           moveBlock = false;
           canSend(OUTPUT_ROBOT_FINISHED);
-          pickupAttempts++;
       }
       
     while(paused)
