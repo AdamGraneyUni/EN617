@@ -140,7 +140,6 @@ static void appTaskMonitorSens1(void *pdata) {
           canSend(READY_TO_PICKUP_CONVEYOR);
           OSTimeDly(20);
         }
-        //THIS IS NOT WORKING FIX IT
         canSend(PICKED_UP_CONVEYOR);
         noBlocks -= 1;
     }
@@ -163,10 +162,12 @@ static void appTaskMonitorSens2(void *pdata) {
     if (conveyorItemPresent(CONVEYOR_SENSOR_2) && checkForInputBlock) {
         OSTimeDlyHMSM(0,0,2,0);
         if (conveyorItemPresent(CONVEYOR_SENSOR_2)){
-          conveyorSetState(CONVEYOR_REVERSE);
           checkForInputBlock = false;
           stopConveyorForLoad = false;
           noBlocks += 1;
+          if (!conveyorItemPresent(CONVEYOR_SENSOR_1)){
+            conveyorSetState(CONVEYOR_REVERSE);
+          }
         }
     }
     if (stopConveyorForLoad){
