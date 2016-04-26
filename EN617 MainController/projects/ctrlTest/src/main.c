@@ -27,7 +27,6 @@ enum {
   APP_TASK_MONITOR_SENS1_PRIO,
   APP_TASK_MONITOR_SENS2_PRIO,
   APP_TASK_MONITOR_BUTTON_PRIO,
-  APP_TASK_CTRL_PRIO,
   APP_TASK_DISPLAY_PRIO,
   APP_TASK_LEDS_PRIO
 };
@@ -40,7 +39,6 @@ enum {
   APP_TASK_EMERGENCY_STOP_STK_SIZE = 256,
   APP_TASK_MONITOR_SENS1_STK_SIZE = 512,
   APP_TASK_MONITOR_SENS2_STK_SIZE = 512,
-  APP_TASK_CTRL_STK_SIZE = 512,
   APP_TASK_MONITOR_BUTTON_STK_SIZE = 256,
   APP_TASK_DISPLAY_STK_SIZE = 256,
   APP_TASK_LEDS_STK_SIZE = 256
@@ -49,7 +47,6 @@ enum {
 static OS_STK appTaskMonitorButtonStk[APP_TASK_MONITOR_BUTTON_STK_SIZE];
 static OS_STK appTaskMonitorSens1Stk[APP_TASK_MONITOR_SENS1_STK_SIZE];
 static OS_STK appTaskMonitorSens2Stk[APP_TASK_MONITOR_SENS2_STK_SIZE];
-static OS_STK appTaskCtrlStk[APP_TASK_CTRL_STK_SIZE];
 static OS_STK appTaskDisplayStk[APP_TASK_DISPLAY_STK_SIZE];
 static OS_STK appTaskEmergencyStopStk[APP_TASK_EMERGENCY_STOP_STK_SIZE];
 static OS_STK appTaskLedsStk[APP_TASK_LEDS_STK_SIZE];
@@ -63,7 +60,6 @@ static void appTaskDisplay(void *pdata);
 static void appTaskMonitorButton(void *pdata);
 static void appTaskMonitorSens1(void *pdata);
 static void appTaskMonitorSens2(void *pdata);
-static void appTaskCtrl(void *pdata);
 static void canSend(uint32_t id);
 static void canHandler(void);
 static canMessage_t can1RxBuf;
@@ -146,7 +142,7 @@ static void appTaskEmergencyStop(void *pdata)
       if(isButtonPressed(JS_RIGHT))
       {
         canSend(RESET);
-        dly100us(500);
+        dly100us(50);
         __iar_program_start();
       }
     }
@@ -291,20 +287,28 @@ static void appTaskLeds(void *pdata)
   interfaceInit(CONTROL);
   interfaceLedSetState(D1_LED | D2_LED | D3_LED | D4_LED, LED_OFF);
   
+  for(int i = 0; i < 5; i++)
+  {
+    interfaceLedToggle(D4_LED);
+    OSTimeDlyHMSM(0,0,0,300);
+  }
   while(true)
   {
     
     if(stopped && (blocks_in_system > 0))
     {
       interfaceLedToggle(D1_LED);
+      interfaceLedSetState(D4_LED, LED_OFF); //Ready light
     }
     else if(stopped)
     {
       interfaceLedSetState(D1_LED, LED_OFF);
+      interfaceLedSetState(D4_LED, LED_OFF); //Ready light
     }
     else
     {
       interfaceLedSetState(D1_LED, LED_ON);
+      interfaceLedSetState(D4_LED, LED_ON); //Ready light
     }
     
     if(paused)
@@ -319,6 +323,7 @@ static void appTaskLeds(void *pdata)
     if(emergencyStop || stopped)
     {
       interfaceLedSetState(D3_LED, LED_OFF);
+      interfaceLedSetState(D4_LED, LED_OFF); //Ready light
     }
     else
     {
@@ -331,7 +336,6 @@ static void appTaskLeds(void *pdata)
 
 static void canSend(uint32_t id) {
   canMessage_t msg = {0, 0, 0, 0};
-  bool txOk = false;
   
   /* Initialise the CAN message structure */
   msg.id = id;  // arbitrary CAN message id
@@ -339,7 +343,7 @@ static void canSend(uint32_t id) {
   msg.dataA = 0;
   msg.dataB = 0;
   
-  txOk = canWrite(CAN_PORT_1, &msg);
+  canWrite(CAN_PORT_1, &msg);
   }
 
 /*
