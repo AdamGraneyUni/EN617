@@ -59,6 +59,7 @@ bool emergencyStop = false;
 bool paused = false;
 bool blockPickedUp = false;
 bool stopped = true;
+bool conveyorOccupied = false;
 int pickupAttempts = 0;
 extern void __iar_program_start(void);
 /*****************************************************************************
@@ -146,6 +147,7 @@ static void moveJoint(robotJoint_t joint, int position){
 
 static void appTaskMoveBlock(void *pdata){
   while (true){
+    if (!conveyorOccupied){
       while(moveBlock){
            if (pickupAttempts == 2){
               canSend(EMERGENCY_STOP);
@@ -189,7 +191,7 @@ static void appTaskMoveBlock(void *pdata){
           //HAND to Neutral
           moveJoint(ROBOT_HAND, 45000);
       }
-      
+    }
     while(paused)
     {
       OSTimeDlyHMSM(0,0,0,500);
@@ -237,9 +239,14 @@ static void canHandler(void) {
       if(msg.id == STOP)
       {
         stopped = true;
+      }if(msg.id == CONVEYOR_OCCUPIED)
+      {
+        conveyorOccupied = true;
       }
-      
-    
+      if(msg.id == CONVEYOR_FREE)
+      {
+        conveyorOccupied = false;
+      }
   }
 }
 
