@@ -152,13 +152,16 @@ static void appTaskMonitorSens1(void *pdata) {
   
 }
 static void appTaskMonitorSens2(void *pdata) {
- 
-  
   /* 
    * Now execute the main task loop for this task
    */
   while (true) {
-    
+    if (conveyorItemPresent(CONVEYOR_SENSOR_2)){
+      canSend(CONVEYOR_OCCUPIED);
+    }
+    if (!conveyorItemPresent(CONVEYOR_SENSOR_2)){
+      canSend(CONVEYOR_FREE);
+    }
     if (conveyorItemPresent(CONVEYOR_SENSOR_2) && checkForInputBlock) {
         OSTimeDlyHMSM(0,0,2,0);
         if (conveyorItemPresent(CONVEYOR_SENSOR_2)){

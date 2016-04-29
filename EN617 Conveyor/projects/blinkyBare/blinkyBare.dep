@@ -7,17 +7,41 @@
     <name>Flash</name>
     <outputs>
       <file>$PROJ_DIR$\..\..\bsp\include\accelerometer.h</file>
-      <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\bsp.h</file>
       <file>$PROJ_DIR$\..\..\bsp\include\adc.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\buttons.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\can.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\delay.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\lcd.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\leds.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\potentiometer.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\pwm.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\include\timers.h</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\lcd\fonts\Terminal_9_12x6.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\lcd\drv_glcd.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\lcd\glcd_ll.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\accelerometer.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\adc.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\bsp.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\buttons.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\can.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\delay.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\lcd.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\leds.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\potentiometer.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\pwm.c</file>
+      <file>$PROJ_DIR$\..\..\bsp\src\timers.c</file>
+      <file>$PROJ_DIR$\src\main.c</file>
+      <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
       <file>$PROJ_DIR$\Flash\Obj\Terminal_9_12x6.o</file>
       <file>$PROJ_DIR$\Flash\Obj\accelerometer.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\bsp.o</file>
       <file>$PROJ_DIR$\Flash\Obj\drv_glcd.o</file>
       <file>$PROJ_DIR$\Flash\Obj\timers.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\bsp.o</file>
       <file>$PROJ_DIR$\Flash\Obj\potentiometer.o</file>
-      <file>$PROJ_DIR$\Flash\Obj\adc.o</file>
       <file>$PROJ_DIR$\Flash\Obj\buttons.o</file>
       <file>$PROJ_DIR$\Flash\Obj\glcd_ll.o</file>
+      <file>$PROJ_DIR$\Flash\Obj\adc.o</file>
       <file>$PROJ_DIR$\Flash\Obj\drv_glcd.pbi</file>
       <file>$PROJ_DIR$\Flash\Obj\delay.o</file>
       <file>$PROJ_DIR$\Flash\Obj\can.o</file>
@@ -52,30 +76,6 @@
       <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
       <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
       <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\buttons.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\bsp.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\can.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\delay.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\lcd.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\leds.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\potentiometer.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\pwm.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\include\timers.h</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\lcd\fonts\Terminal_9_12x6.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\lcd\drv_glcd.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\lcd\glcd_ll.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\accelerometer.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\adc.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\bsp.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\buttons.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\can.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\delay.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\lcd.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\leds.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\potentiometer.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\pwm.c</file>
-      <file>$PROJ_DIR$\..\..\bsp\src\timers.c</file>
-      <file>$PROJ_DIR$\src\main.c</file>
       <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
       <file>$PROJ_DIR$\..\..\bsp\include\board.h</file>
       <file>$TOOLKIT_DIR$\inc\c\ystdio.h</file>
@@ -87,30 +87,21 @@
       <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
     </outputs>
     <file>
-      <name>[ROOT_NODE]</name>
-      <outputs>
-        <tool>
-          <name>ILINK</name>
-          <file> 74</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\bsp\src\lcd\fonts\Terminal_9_12x6.c</name>
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 3</file>
+          <file> 27</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 18</file>
+          <file> 42</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 27 33 35 34 29 45</file>
+          <file> 51 57 59 58 53 69</file>
         </tool>
       </inputs>
     </file>
@@ -119,17 +110,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 5</file>
+          <file> 30</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 12</file>
+          <file> 36</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 45 44 34 36 39 38 37 42 35 41 71 49 72 43 78 40 29 70 33 27 77</file>
+          <file> 69 68 58 60 63 62 61 66 59 65 71 5 72 67 78 64 53 70 57 51 77</file>
         </tool>
       </inputs>
     </file>
@@ -138,17 +129,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 11</file>
+          <file> 34</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 17</file>
+          <file> 41</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 35 27 71 40 29 36 45</file>
+          <file> 59 51 71 64 53 60 69</file>
         </tool>
       </inputs>
     </file>
@@ -157,17 +148,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 4</file>
+          <file> 28</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 16</file>
+          <file> 40</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 45 42 37 77 44 38 43 78 2 0</file>
+          <file> 69 66 61 77 68 62 67 78 2 0</file>
         </tool>
       </inputs>
     </file>
@@ -176,17 +167,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 9</file>
+          <file> 35</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 22</file>
+          <file> 46</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 40 71 44 45 77 2 42 38 37 29 1 36 47 43 78 41 35</file>
+          <file> 64 71 68 69 77 2 66 62 61 53 26 60 1 67 78 65 59</file>
         </tool>
       </inputs>
     </file>
@@ -195,17 +186,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 7</file>
+          <file> 29</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 24</file>
+          <file> 48</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 44 0 39 51 47 70 27 36 2 53 45 38 37 42 77 29 71 46 52 50 48 43 78 40 33 35 1 34 72</file>
+          <file> 68 0 63 7 1 70 51 60 2 9 69 62 61 66 77 53 71 3 8 6 4 67 78 64 57 59 26 58 72</file>
         </tool>
       </inputs>
     </file>
@@ -214,17 +205,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 10</file>
+          <file> 33</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 25</file>
+          <file> 49</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 45 43 40 42 71 78 1 36 46 44 38 37 29 41 35 77</file>
+          <file> 69 67 64 66 71 78 26 60 3 68 62 61 53 65 59 77</file>
         </tool>
       </inputs>
     </file>
@@ -233,17 +224,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 14</file>
+          <file> 38</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 26</file>
+          <file> 50</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 45 48 78 1 43 77 36 47 42 44 38 37 40 41</file>
+          <file> 69 4 78 26 67 77 60 1 66 68 62 61 64 65</file>
         </tool>
       </inputs>
     </file>
@@ -252,17 +243,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 13</file>
+          <file> 37</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 32</file>
+          <file> 56</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 45 42 37 77 44 38 43 78 49</file>
+          <file> 69 66 61 77 68 62 67 78 5</file>
         </tool>
       </inputs>
     </file>
@@ -271,17 +262,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 15</file>
+          <file> 39</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 31</file>
+          <file> 55</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 39 44 70 27 49 45 42 50 38 37 77 33 43 78 34 72 35 29</file>
+          <file> 63 68 70 51 5 69 66 6 62 61 77 57 67 78 58 72 59 53</file>
         </tool>
       </inputs>
     </file>
@@ -290,7 +281,7 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 21</file>
+          <file> 45</file>
         </tool>
         <tool>
           <name>BICOMP</name>
@@ -300,7 +291,7 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 45 38 37 42 71 44 36 51 43 78 40 29 77 35</file>
+          <file> 69 62 61 66 71 68 60 7 67 78 64 53 77 59</file>
         </tool>
       </inputs>
     </file>
@@ -309,26 +300,35 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 8</file>
+          <file> 32</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 30</file>
+          <file> 54</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 42 78 29 45 71 44 38 43 35 77 2 37 52</file>
+          <file> 66 78 53 69 71 68 62 67 59 77 2 61 8</file>
         </tool>
       </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 74</file>
+        </tool>
+      </outputs>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\bsp\src\pwm.c</name>
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 19</file>
+          <file> 43</file>
         </tool>
         <tool>
           <name>BICOMP</name>
@@ -338,7 +338,7 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 77 29 53 45 43 40 42 71 78 36 47 44 38 37 41 35</file>
+          <file> 77 53 9 69 67 64 66 71 78 60 1 68 62 61 65 59</file>
         </tool>
       </inputs>
     </file>
@@ -347,7 +347,7 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 6</file>
+          <file> 31</file>
         </tool>
         <tool>
           <name>BICOMP</name>
@@ -357,7 +357,7 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 45 47 40 37 71 54 35 29 42 77 36 44 38 43 78</file>
+          <file> 69 1 64 61 71 10 59 53 66 77 60 68 62 67 78</file>
         </tool>
       </inputs>
     </file>
@@ -366,17 +366,17 @@
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 20</file>
+          <file> 44</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 28</file>
+          <file> 52</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 77 42 45 37 47 44 38 43 78 1 49 51</file>
+          <file> 77 66 69 61 1 68 62 67 78 26 5 7</file>
         </tool>
       </inputs>
     </file>
@@ -385,7 +385,7 @@
       <outputs>
         <tool>
           <name>OBJCOPY</name>
-          <file> 23</file>
+          <file> 47</file>
         </tool>
       </outputs>
     </file>
