@@ -1,13 +1,5 @@
-/* Conveyor Test
- * JS UP -> forward
- *    DN -> reverse
- *    L,R -> stop
- * 
- * Conveyor sensor 1 reported  on interface LED 1 and LINK LED
- * Conveyor sensor 2 reported  on interface LED 2 and CONNECT LED
- *
- * item sensed at 1 and moving in reverse -> stop
- * item sensed at 2 and moving forward -> stop
+/* Conveyor implementation
+ * Implementation of the conveyor belt for the system in an RTOS
  */
 
 #include <stdbool.h>
@@ -105,11 +97,14 @@ int main() {
 /*************************************************************************
 *                   APPLICATION TASK DEFINITIONS
 *************************************************************************/
+
+/* Emergency Stop Task
+ * This task handles the pause, stop and emergency stop functions
+ * in the system.
+ */
 static void appTaskEmergencyStop(void *pdata)
 {
-   /* Start the OS ticker
-   * (must be done in the highest priority task)
-   */
+   // Start the OS ticker
   osStartTick();
   canRxInterrupt(canHandler);
   while(true)
@@ -127,10 +122,14 @@ static void appTaskEmergencyStop(void *pdata)
     else{
       OSTimeDlyHMSM(0,0,0,500);
     }
-    
   }
 }
 
+/* Monitor Sensor One Task
+ * This task handles the monitoring of sensor one, the end sensor
+ * and sends a message to the output robot when a block is ready
+ * to be picked up.
+ */
 static void appTaskMonitorSens1(void *pdata) {
    while (true) { 
     if (conveyorItemPresent(CONVEYOR_SENSOR_1)) {
@@ -149,8 +148,13 @@ static void appTaskMonitorSens1(void *pdata) {
     
     OSTimeDly(20);
   }
-  
 }
+
+/* Monitor Sensor Two Task
+ * This task handles the monitoring of sensor two, the start sensor
+ * and sends a message to the inpiut robot when the conveyor is 
+ * occupied or free to deposit. 
+ */
 static void appTaskMonitorSens2(void *pdata) {
   /* 
    * Now execute the main task loop for this task
@@ -180,6 +184,9 @@ static void appTaskMonitorSens2(void *pdata) {
   }
 }
 
+/* Can Send Function
+ * A function for the sending of can messages on the bus.
+ */
 static void canSend(uint32_t id) {
   canMessage_t msg = {0, 0, 0, 0};   
   bool txOk = false;        
@@ -193,7 +200,9 @@ static void canSend(uint32_t id) {
 }
 
 /*
- * A simple interrupt handler for CAN message reception on CAN1
+ * An interrupt handler for CAN message reception on CAN1
+ * When a message is recieved the ID is checked and local
+ * variables are updated within the conveyor sub-system.
  */
 static void canHandler(void) {
   if (canReady(CAN_PORT_1)) {
@@ -224,6 +233,5 @@ static void canHandler(void) {
     if(msg.id == STOP){
       stopped = true;
     }
-    
   }
 }
