@@ -1,8 +1,9 @@
-/* Test Robot
- * Joystick UP    -> inc current joint coordinate
- * Joystick DOWN  -> dec current joint coordinate
- * Joystick RIGHT -> cycle joint selection HAND -> WRIST -> ELBOW -> WAIST
- * Joystick left  -> cycle joint selection HAND <- WRIST <- ELBOW <- WAIST
+/* EN617 Robot 2 Implementation
+ * Adam Graney - 12009005
+ * ----------------------------
+ * Robot 2 implementation for the picking up of blocks
+ * from the conveyor and placing them on pad 2.
+ * 
  */
 #include <stdbool.h>
 #include <ucos_ii.h>
@@ -75,19 +76,19 @@ int main() {
   OSInit();  
   
     
-  /* Create emergency stop */
+  /* Create emergency stop task */
   OSTaskCreate(appTaskEmergencyStop,                               
                (void *)0,
                (OS_STK *)&appTaskEmergencyStopStk[APP_TASK_EMERGENCY_STOP_STK_SIZE - 1],
                APP_TASK_EMERGENCY_STOP_PRIO);
 
-  /* Create Tasks */
+  /* Create buttons task, used when testing to get robot positions */
   OSTaskCreate(appTaskButtons,                               
                (void *)0,
                (OS_STK *)&appTaskButtonsStk[APP_TASK_BUTTONS_STK_SIZE - 1],
                APP_TASK_BUTTONS_PRIO);
   
-  /* Create Tasks */
+  /* Create move block task for the moving of the block from conveyor to pad 2 */
   OSTaskCreate(appTaskMoveBlock,                               
                (void *)0,
                (OS_STK *)&appTaskMoveBlockStk[APP_TASK_MOVE_BLOCK_STK_SIZE - 1],
@@ -103,6 +104,11 @@ int main() {
 /**************************************************************************
 *                             APPLICATION TASK DEFINITIONS
 ****************************************************************************/
+/*
+ * appTaskEmergencyStop - Emergency stop task
+ * This task handles the emergency stop and stop tasks in
+ * the robot 2 subsystem.
+ */
 static void appTaskEmergencyStop(void *pdata)
 {
    /* Start the OS ticker
@@ -123,16 +129,26 @@ static void appTaskEmergencyStop(void *pdata)
   }
 }
 
-
+/*
+ * appTaskButtons - Buttons task used for testing
+ * The app task buttons task was used for the testing of the robot,
+ * when deciding what position the robot should move too. This task
+ * is not used for the final implementation of the system.
+ */
 static void appTaskButtons(void *pdata) {
-  
-  
-  /* the main task loop for this task  */
+  /* Removed task contents as not used in implementation */
   while (true) {
    OSTimeDly(20);                    
   }
 }
 
+/*
+ * moveJoint - Function used for the moving of the robot joints
+ * The function move joint is used to avoid code duplication when moving the joints
+ * of the robot to there required position. The function checks the current position,
+ * comparing it to the desired desitnation and either increments or decrements the 
+ * position depending on the position read.
+ */
 static void moveJoint(robotJoint_t joint, int position){
   while ((robotJointGetState(joint) < position) || (robotJointGetState(joint) > position)){
         if(robotJointGetState(joint) < position){
@@ -146,6 +162,19 @@ static void moveJoint(robotJoint_t joint, int position){
       }
 }
 
+/*
+ * appTaskMoveBlock - Task for moving the block from the conveyor to the pad.
+ * The task move block is used for the process of moving the block
+ * from the conveyor to the pad. The task works by waiting for a block to be on
+ * the conveyor end sensor and when it is true it runs. 
+ *
+ * The task picks up the block and moves it using the moveJoint function to the required
+ * position. The paused functionality works by pausing the system after the move is complete
+ * as indicated in the system specification. 
+ *
+ * The pickUpAttempts function checks for a block failing to be picked up. If this
+ * fails twice then the full system will emergency stop.
+ */
 static void appTaskMoveBlock(void *pdata){
   while (true){
       while(moveBlock){
@@ -205,6 +234,7 @@ static void appTaskMoveBlock(void *pdata){
     OSTimeDly(20);
   }
 }
+
 /*
  * A simple interrupt handler for CAN message reception on CAN1
  */
@@ -253,6 +283,10 @@ static void canHandler(void) {
   }
 }
 
+/*
+ * A can send function for the sending of can messages 
+ * on the can bus.
+ */
 static void canSend(uint32_t id) {
   canMessage_t msg = {0, 0, 0, 0};
 
